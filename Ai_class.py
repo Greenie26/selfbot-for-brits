@@ -20,7 +20,7 @@ def log_to_console(filepath: str, module_name: str, text: str):
     time = datetime.datetime.now().strftime("%H:%M:%S")
     print(f"[{time}] [{filepath}] [{module_name}] {text}")
 
-def call_the_chat(message):
+async def call_the_chat(message):
     if not message:
         return "I don't know"
     
@@ -49,7 +49,7 @@ def call_the_chat(message):
         log_to_console((Path(__file__).name), "TEXT AI", f"text ai error: {e}")
         return "I don't know"
 
-def call_the_vl(base64_data):
+async def call_the_vl(base64_data):
     log_to_console((Path(__file__).name), "VISUAL AI", f"received a message for visual ai")
     try:
         response = second_client.chat.completions.create(

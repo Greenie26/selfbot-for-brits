@@ -78,6 +78,7 @@ async def on_ready():
     print ("*"*40)
     print ("Bot is ready to serve :D")
     print (f"Username: {client.user.name}")
+    print (f"Bot version: {config["BOT_VERSION"]}")
     print ("*"*40)
 
 #@commands.cooldown(3, 15, commands.BucketType.channel)
@@ -136,7 +137,7 @@ async def question(ctx: commands.Context):
     askinguser = ctx.author.name
     question = ctx.message.content
     try:
-        answer = call_the_chat(ctx.message.content.split(None, 1)[1])
+        answer = await call_the_chat(ctx.message.content.split(None, 1)[1])
         await ctx.message.reply(answer)
     except IndexError:
         await ctx.message.reply("You need to prove a question.")
@@ -206,7 +207,7 @@ async def on_message(message):
                 img.save(buffer, format='JPEG', quality=85)
                 base64cleaned = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-                verdict = call_the_vl(base64cleaned)
+                verdict = await call_the_vl(base64cleaned)
                 verdictwords = verdict.split("|")
                 verdict_status = verdictwords[0].strip()
                 verdict_reason = verdictwords[1].strip() 
@@ -241,7 +242,10 @@ async def on_message(message):
 async def on_message_delete( message):
     if message.id in ping_messages:
         ping_message = ping_messages.pop(message.id)
-        await ping_message.delete()
-        log_to_console((Path(__file__).name), "scam_detection", f"deleting ping message as the pinged message {message.id} was deleted")
+        try:
+            await ping_message.delete()
+            log_to_console((Path(__file__).name), "scam_detection", f"deleting ping message as the pinged message {message.id} was deleted")
+        except discord.NotFound:
+            pass
 
 client.run(TOKEN)
