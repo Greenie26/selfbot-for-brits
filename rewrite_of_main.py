@@ -1,8 +1,12 @@
-import time, ServerPinging, json, discord, io, base64
+import time, ServerPinging, json, discord, io, base64, os
 from discord.ext import commands
 from Ai_class import call_the_chat, call_the_vl
 from pathlib import Path
 from PIL import Image
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
 
 FOLDER_DIR = Path(__file__).resolve().parent
 print(FOLDER_DIR)
@@ -15,7 +19,6 @@ FILES = {
 with open(FILES["config"], "r") as file:
     config = json.load(file)
 
-TOKEN = config["TOKEN"]
 ALLOWED_CHANNELS = list(config["ALLOWED_CHANNELS"].values())
  
 client = commands.Bot(command_prefix=".")
