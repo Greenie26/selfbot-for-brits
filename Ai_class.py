@@ -1,10 +1,13 @@
-import json
+import json, datetime
 from openai import OpenAI
 from info import system_prompt
 from pathlib import Path
-from rewrite_of_main import config
+FOLDER_DIR = Path(__file__).resolve().parent
 
-local_ip = int(config["LOCAL_IP"])
+with open(FOLDER_DIR / "config.json", "r") as file:
+    config = json.load(file)
+
+local_ip = config["LOCAL_IP"]
 first_client = OpenAI(
     base_url=f"http://{local_ip}:11434/v1",
     api_key="ollama" 
@@ -13,13 +16,16 @@ second_client = OpenAI(
     base_url=f"http://{local_ip}:11434/v1",
     api_key="ollama" 
 )
+def log_to_console(filepath: str, module_name: str, text: str):
+    time = datetime.datetime.now().strftime("%H:%M:%S")
+    print(f"[{time}] [{filepath}] [{module_name}] {text}")
 
 def call_the_chat(message):
     if not message:
         return "I don't know"
     
     
-    print(f"[{Path(__file__).name}] [text ai] received a message for ai")
+    log_to_console((Path(__file__).name), "TEXT AI", "received a message for text ai")
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": f"<user_query>\n{message}<user_query>\n"}
@@ -40,11 +46,11 @@ def call_the_chat(message):
         )
         return response.choices[0].message.content
     except Exception as e:
-        print(f"[{Path(__file__).name}] text ai error: {e}")
+        log_to_console((Path(__file__).name), "TEXT AI", f"text ai error: {e}")
         return "I don't know"
 
 def call_the_vl(base64_data):
-    print(f"[{Path(__file__).name}] [vl ai] received a message for ai")
+    log_to_console((Path(__file__).name), "VISUAL AI", f"received a message for visual ai")
     try:
         response = second_client.chat.completions.create(
             model="qwen2.5vl:3b",  
@@ -64,5 +70,5 @@ def call_the_vl(base64_data):
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-         print(f"[{Path(__file__).name}] visual ai error: {e}")
-         return "SAFE | couldn't test the image"
+        log_to_console((Path(__file__).name), "VISUAL AI", f"visual ai error: {e}")
+        return "SAFE | couldn't test the image"

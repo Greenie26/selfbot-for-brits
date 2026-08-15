@@ -1,4 +1,4 @@
-import time, ServerPinging, json, discord, io, base64, os
+import datetime, ServerPinging, json, discord, io, base64, os
 from discord.ext import commands
 from Ai_class import call_the_chat, call_the_vl
 from pathlib import Path
@@ -29,6 +29,11 @@ ping_messages = {}
 
 GUILD_ID = config["TARGET_GUILD_ID"]
 BOT_IDS = config["BOT_IDS"]
+
+#decided to play with output a bit, make it more "fun"
+def log_to_console(filepath: str, module_name: str, text: str):
+    time = datetime.datetime.now().strftime("%H:%M:%S")
+    print(f"[{time}] [{filepath}] [{module_name}] {text}")
 # ----------------
 def format_delay(delay_list: list[bool, int], max_ping):
     if delay_list[1] >= max_ping and delay_list[0]:
@@ -69,38 +74,19 @@ async def on_ready():
     print (f"Username: {client.user.name}")
     print ("*"*40)
 
-
+#@commands.cooldown(3, 15, commands.BucketType.channel)
 @client.command()
 async def status(ctx: commands.Context):
-    global sent_messages, timeout_until
-
-    if ctx.channel.id not in ALLOWED_CHANNELS:
-        return
     
-    #dunno where to put this clunky code, don't know how to make it into a function 3:
-    now = time.time()
-    if now < timeout_until:
-        remaining = round(timeout_until - now, 1)
-        await ctx.channel.send(f"timeout: wait {remaining} seconds until typing again", delete_after=4)
-        return
-    sent_messages = [(t, msg) for t, msg in sent_messages if now - t < 10]
-    if len(sent_messages) >= 3:
-        timeout_until = now + 15
-        for _, msg in sent_messages:
-            try:
-                await msg.delete()
-            except Exception:
-                pass
-        sent_messages.clear()
-        await ctx.channel.send("timeout: wait 15.0 seconds until typing again", delete_after=4)
-        return
+   #if ctx.channel.id not in ALLOWED_CHANNELS:
+     #   return
     
     # load bots so they won't equal to None when you search for them
-    print(f"[{Path(__file__).name}] [status] Loading specific bots into memory...")
+    log_to_console((Path(__file__).name), "status", "loading specific bots into memory.")
 
     members = await get_bots()
     
-    print(f"[{Path(__file__).name}] [status] Bots loaded!")
+    log_to_console((Path(__file__).name), "status", "bots loaded.")
 
     USBOT = next((member for member in members if member.id == int(BOT_IDS["USbotID"])), None)
     EUBOT = next((member for member in members if member.id == int(BOT_IDS["EUbotID"])), None)
@@ -114,7 +100,7 @@ async def status(ctx: commands.Context):
     EUWorldsDelay =  format_delay(ServerPinging.get_eu_delay(), 250)
     AUWorldsDelay =  format_delay(ServerPinging.get_au_delay(), 320)
 
-    print(f"[{Path(__file__).name}] [status] Proccessed everything correctly")
+    log_to_console((Path(__file__).name), "status", "Proccessed everything correctly")
 
     sent_msg = await ctx.message.reply(
         f"US status - {UsStatus} {USWorldsDelay}\n"
@@ -123,8 +109,15 @@ async def status(ctx: commands.Context):
         f"-# Delays are for client that is located at Southeastern region of USA",
         mention_author=True
     )   
-    sent_messages.append((now, sent_msg))
-    print(f"[{Path(__file__).name}] [status] sent a message correctly")
+    log_to_console((Path(__file__).name), "status", "sent a message correctly")
+
+@status.error
+async def status_error(ctx: commands.Context, error):
+    log_to_console((Path(__file__).name), "error" f"{error}")
+    if isinstance(error, commands.CommandOnCooldown):
+        remaining = round(error.retry_after, 1)
+        await ctx.send(f"{ctx.author.mention} timeout: wait {remaining} seconds before typing again", delete_after=4)
+        log_to_console((Path(__file__).name), "status", f"command went on cooldown for {remaining} seconds.")
 
 @client.command()
 async def question(ctx: commands.Context):
@@ -138,30 +131,31 @@ async def question(ctx: commands.Context):
         answer= "You need to prove a question."
     with open(FILES["question_logger"], "a", encoding="utf-8") as file:
         file.write(f"{askinguser}\n{question}\n{answer}\n---------\n")
-    print(f"[{Path(__file__).name}] [question] wrote to the {Path(FILES['question_logger']).name} file")
+    log_to_console((Path(__file__).name), "question", f"wrote to the {Path(FILES['question_logger']).name} file")
 
 @client.command()
 async def submit_question(ctx: commands.Context):
     reason = ctx.message.content.split(None, 1)[1]
     with open(FILES["questions"], "a", encoding="utf-8") as file:
         file.write(f"{reason}\n---------\n")
-    print(f"[{Path(__file__).name}] [submit_question] wrote to the {Path(FILES['questions']).name} file ")
+    log_to_console((Path(__file__).name), "submit_question" f"wrote to the {Path(FILES['questions']).name} file ")
 
 @client.event
 async def on_message(message):
     await client.process_commands(message)
     if message.attachments:
         #if message.author.id in list(config["WHITELISTED_PEOPLE"].values()):
-        #    print(f"[{Path(__file__).name}] [scam_detection] exempting {message.author.name} (id: {message.author.id}), because whitelisted")
+        #    log_to_console((Path(__file__).name), "scam_detection", f"exempting {message.author.name} (id: {message.author.id}), because whitelisted")
         #    return 
     
         if message.channel.id not in ALLOWED_CHANNELS:
             return
         
         flagged_reasons = []
+        verdict_status = "None"
         for file in message.attachments:
             if file.content_type and file.content_type.startswith('image/'):
-                print(f"[{Path(__file__).name}] [scam_detection] Found image in {message.author.name}'s (id: {message.author.id}) message (message_id: {message.id})")
+                log_to_console((Path(__file__).name), "scam_detection", f"Found image in {message.author.name}'s (id: {message.author.id}) message (message_id: {message.id})")
 
                 #this was written by ai, cause i'm again, too stupid
                 raw_data = await file.read()
@@ -185,7 +179,7 @@ async def on_message(message):
                 )
                 if "SCAM" in verdict_status.upper():
                     flagged_reasons.append(verdict_status)
-        print(f"\n[{Path(__file__).name}] [scam_detection] If scam present ({verdict_status}), giving a ping.\n")
+            log_to_console((Path(__file__).name), "scam_detection", f"If scam present ({verdict_status}), giving a ping.\n")
         if flagged_reasons:
             pinged_message = await message.channel.send(
                 f"<@1002650457333841950>\n"
@@ -201,6 +195,6 @@ async def on_message_delete( message):
     if message.id in ping_messages:
         ping_message = ping_messages.pop(message.id)
         await ping_message.delete()
-        print(f"[{Path(__file__).name}] [scam_detection] deleting ping message as the pinged message {message.id} was deleted")
+        log_to_console((Path(__file__).name), "scam_detection", f"deleting ping message as the pinged message {message.id} was deleted")
 
 client.run(TOKEN)
