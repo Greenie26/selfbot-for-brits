@@ -117,6 +117,12 @@ async def status_error(ctx: commands.Context, error):
         await ctx.send(f"{ctx.author.mention} timeout: wait {remaining} seconds before typing again", delete_after=4)
         log_to_console((Path(__file__).name), "status", f"command went on cooldown for {remaining} seconds.")
 
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        return
+    raise error
+
 @client.command()
 async def question(ctx: commands.Context):
     askinguser = ctx.author.name
