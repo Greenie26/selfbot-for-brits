@@ -23,8 +23,6 @@ ALLOWED_CHANNELS = list(config["ALLOWED_CHANNELS"].values())
  
 client = commands.Bot(command_prefix=".")
 
-sent_messages = []
-timeout_until = 0
 ping_messages = {}
 
 GUILD_ID = config["TARGET_GUILD_ID"]
