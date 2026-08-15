@@ -40,7 +40,15 @@ def format_delay(delay_list: list[bool, int], max_ping):
         return f"| delay {delay_list[1]}ms, Normal"
     elif not delay_list[0]:
         return ""
-# ----------------    
+# ----------------
+async def check_for_whitelist(ctx):
+    role_ids = [role.id for role in ctx.author.roles]
+    if role_ids in list(config["WHITELISTED_ROLES"].values()):
+        return True
+    if ctx.author.id in list(config["WHITELISTED_PEOPLE"].values()):
+        return True
+    return False
+# ----------------
 async def get_bots():
     GUILD = await client.fetch_guild(GUILD_ID)
     members = await GUILD.query_members(
@@ -138,6 +146,35 @@ async def question(ctx: commands.Context):
     log_to_console((Path(__file__).name), "question", f"wrote to the {Path(FILES['question_logger']).name} file")
 
 @client.command()
+async def get_notified(ctx):
+    if not await check_for_whitelist(ctx):
+        await ctx.reply("my guy, you are not an admin :pray: :wilted_rose:", delete_after=5)
+        return
+    username = ctx.message.author.name
+    userID = ctx.message.author.id
+
+    with open(FILES["config"], "r") as file:
+        config = json.load(file)
+    config["ENROLLED_FOR_PING_PEOPLE"][username] = userID
+    with open(FILES["config"], "w") as file:
+        json.dump(config, file, indent=4)
+    await ctx.reply("successfully added you to notification", delete_after=5)
+
+@client.command()
+async def dont_get_notified(ctx: commands.Context):
+    if not await check_for_whitelist(ctx):
+        await ctx.reply("my guy, you are not an admin :pray: :wilted_rose:", delete_after=5)
+        return
+    username = ctx.message.author.name
+
+    with open(FILES["config"], "r") as file:
+        config = json.load(file)
+    config["ENROLLED_FOR_PING_PEOPLE"].pop(username, None)
+    with open(FILES["config"], "w") as file:
+        json.dump(config, file, indent=4)
+    await ctx.reply("successfully removed you from notification", delete_after=5)
+    
+@client.command()
 async def submit_question(ctx: commands.Context):
     reason = ctx.message.content.split(None, 1)[1]
     with open(FILES["questions"], "a", encoding="utf-8") as file:
@@ -185,9 +222,15 @@ async def on_message(message):
                     flagged_reasons.append(verdict_status)
             log_to_console((Path(__file__).name), "scam_detection", f"If scam present ({verdict_status}), giving a ping.\n")
         if flagged_reasons:
+            ping_list = []
+            pingable_ids = list(config["ENROLLED_FOR_PING_PEOPLE"].values())
+            for pingable_id in pingable_ids:
+                ping_list.append(f"<@{pingable_id}>")
+                ping_list_ready = " ".join(ping_list)
+                print(ping_list)
             pinged_message = await message.channel.send(
-                f"<@1002650457333841950>\n"
-                f"-# pinging for the reason that image(s) above seem like a scam, sorry if it's incorrect, i'm testing to minimize false positives.\n"
+                f"{ping_list_ready}\n"
+                f"-# admins/mods can use .get_notified to join pings, and .dont_get_notified to leave.\n"
                 f"-# P.S NONE of the images are getting logged anywhere.\n"
             )
             ping_messages[message.id] = pinged_message
