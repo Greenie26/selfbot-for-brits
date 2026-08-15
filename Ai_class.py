@@ -1,13 +1,16 @@
-import re
+import json
 from openai import OpenAI
 from info import system_prompt
 from pathlib import Path
+from rewrite_of_main import config
+
+local_ip = int(config["LOCAL_IP"])
 first_client = OpenAI(
-    base_url="http://192.168.0.247:11434/v1",
+    base_url=f"http://{local_ip}:11434/v1",
     api_key="ollama" 
 )
 second_client = OpenAI(
-    base_url="http://192.168.0.247:11434/v1",
+    base_url=f"http://{local_ip}:11434/v1",
     api_key="ollama" 
 )
 
