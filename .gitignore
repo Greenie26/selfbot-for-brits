@@ -1,2 +1,7 @@
 .env
 testfile.py
+
+/__pycache__
+/helper_scripts/__pycache__
+/cogs/__pycache__
+/.vscode
