@@ -20,7 +20,8 @@ with open(FILES["config"], "r") as file:
     config = json.load(file)
 
 ALLOWED_CHANNELS = list(config["ALLOWED_CHANNELS"].values())
- 
+ALLOWED_ART_CHANNELS = list(config["ALLOWED_ART_CHANNELS"].values())
+
 client = commands.Bot(command_prefix=".")
 
 ping_messages = {}
@@ -81,7 +82,7 @@ async def on_ready():
     print (f"Bot version: {config["BOT_VERSION"]}")
     print ("*"*40)
 
-#@commands.cooldown(3, 15, commands.BucketType.channel)
+#@commands.cooldown(1, 15, commands.BucketType.channel)
 @client.command()
 async def status(ctx: commands.Context):
     
@@ -185,12 +186,13 @@ async def submit_question(ctx: commands.Context):
 @client.event
 async def on_message(message):
     await client.process_commands(message)
+    
     if message.attachments:
         #if message.author.id in list(config["WHITELISTED_PEOPLE"].values()):
         #    log_to_console((Path(__file__).name), "scam_detection", f"exempting {message.author.name} (id: {message.author.id}), because whitelisted")
         #    return 
     
-        if message.channel.id not in ALLOWED_CHANNELS:
+        if message.channel.id not in ALLOWED_ART_CHANNELS:
             return
         
         flagged_reasons = []
@@ -235,8 +237,6 @@ async def on_message(message):
                 f"-# P.S NONE of the images are getting logged anywhere.\n"
             )
             ping_messages[message.id] = pinged_message
-    else:
-        return
     
 @client.event
 async def on_message_delete( message):
