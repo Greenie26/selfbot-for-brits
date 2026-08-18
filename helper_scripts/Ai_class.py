@@ -1,10 +1,10 @@
 import json, datetime
 from openai import OpenAI
-from info import system_prompt
+from helper_scripts.info import system_prompt
 from pathlib import Path
-FOLDER_DIR = Path(__file__).resolve().parent
+FOLDER_DIR = Path().resolve()
 
-with open(FOLDER_DIR / "config.json", "r") as file:
+with open(FOLDER_DIR / "storage/config.json", "r") as file:
     config = json.load(file)
 
 local_ip = config["LOCAL_IP"]

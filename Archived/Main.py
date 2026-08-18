@@ -1,4 +1,4 @@
-import datetime, ServerPinging, json, discord, io, base64, os
+import datetime, helper_scripts.ServerPinging as ServerPinging, json, discord, io, base64, os
 from discord.ext import commands
 from Ai_class import call_the_chat, call_the_vl
 from pathlib import Path

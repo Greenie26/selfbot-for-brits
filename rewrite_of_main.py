@@ -6,9 +6,7 @@ from pathlib import Path
 FOLDER_DIR = Path(__file__).resolve().parent
 print(FOLDER_DIR)
 FILES = {
-    "question_logger": FOLDER_DIR / "QaA.txt",
-    "questions": FOLDER_DIR / "QuestionRequests.txt",
-    "config": FOLDER_DIR / "config.json"
+    "config": FOLDER_DIR / "storage/config.json"
 }
 
 with open(FILES["config"], "r") as file:
@@ -31,12 +29,12 @@ async def on_ready():
 cog_list = ['chat_bot', 'scam_detection', 'error_handling', 'server_status']
 async def add_cogs():
     for cog in cog_list:
+        await client.load_extension(f"cogs.{cog}")
         print(
             '*' * 20 
             + f" -> THE COG BY THE NAME: {cog}, LAUCHED <- " +
             '*' * 20 
         )
-        await client.load_extension(f"cogs.{cog}")
 
 asyncio.run(add_cogs())
 

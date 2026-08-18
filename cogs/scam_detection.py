@@ -1,6 +1,6 @@
 import json, discord, io, base64
 from discord.ext import commands
-from Ai_class import call_the_vl
+from helper_scripts.Ai_class import call_the_vl
 from pathlib import Path
 from PIL import Image
 
