@@ -1,0 +1,7 @@
+.env
+testfile.py
+__pycache__/
+*.py[cod]
+*$py.class
+QaA.txt
+QuestionRequests.txt
