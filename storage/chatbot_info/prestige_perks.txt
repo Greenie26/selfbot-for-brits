@@ -1,0 +1,2 @@
+Terminal -: Central storage for all chests. You get it from a prestige perk or players. To pick up or remove -: hold the hammer and clear auth at the nearby switch by holding E.
+Storage cells -: Act like chests for the terminal, but are practically useless, because chests are way more reliable. 

@@ -1,0 +1,42 @@
+/info -: Shows information.
+/hub -: Teleports to hub.
+/q -: Opens quest menu.
+/s -: Opens stock market (shop).
+/st -: Opens skill tree.
+/sell -: Sells items to the server.
+/qr -: Opens virtual quarries.
+/tod -: Prints current time.
+/wipe -: Shows next wipe date.
+/outpost -: Teleports to outpost.
+/bandit -: Teleports to bandit camp.
+/tower1-6 -: Teleports to public heli towers (must be in a regular world).
+/tpr <player> -: Sends a teleport request.
+/tpa -: Accepts a teleport request.
+/tpb -: Teleports back.
+/tpc -: Cancels a teleport request.
+/sethome <name> -: Creates a home.
+/home remove <name> -: Removes a home.
+/home list -: Lists all homes in your current world.
+/home help -: Shows home help menu.
+/m -: Opens market place.
+/red shop -: Redeem items.
+/fmarket -: Opens farmers market.
+/buy -: Lists all vehicles (vehicles last the whole wipe).
+/<vehicle> -: Buys and spawns a specific vehicle.
+/ibag -: Opens ingredients bag.
+/cook -: Opens cooking menu.
+/backpack -: Opens backpack.
+/buyraid -: Purchases a raid base.
+/rb -: Views raid statistics.
+/buydungeon -: Purchases a dungeon.
+/share <player> -: Shares an object with a specific player. If no player name is included, it shares the object with everyone.
+/unshare <player> -: Stops sharing an object with a specific player. If no player name is included, it unshares the object from everyone, removing all access.
+/sharelist -: Lists your shares.
+/shareclear -: Clears all your shares.
+/checkit -: Checks the share status of an object (look at it and type the command).
+/remove -: Removes an object (look at it and left-click an object).
+/limit -: Shows your building/item limits for that specific world.
+/toolazytowalk -: Summons a free bike.
+/boatrecover -: Recovers your boat (ONLY works in deep sea).
+/jet -: Activates jetpack.
+/stfix -: Fixes skill tree bugs (like the crafting table skill).

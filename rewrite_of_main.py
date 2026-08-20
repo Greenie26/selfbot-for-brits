@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 FOLDER_DIR = Path(__file__).resolve().parent
-print(FOLDER_DIR)
+
 FILES = {
     "config": FOLDER_DIR / "storage/config.json"
 }

@@ -19,10 +19,13 @@ class Scam_detection(commands.Cog):
         self.ping_messages = {}
 
     async def check_for_whitelist(self, ctx):
-        role_ids = [role.id for role in ctx.author.roles]
-        if role_ids in list(self.config["WHITELISTED_ROLES"].values()):
-            return True
-        if ctx.author.id in list(self.config["WHITELISTED_PEOPLE"].values()):
+        whitelisted_roles = self.config["WHITELISTED_ROLES"].values()
+        whitelisted_people = self.config["WHITELISTED_PEOPLE"].values()
+        for role in ctx.author.roles:
+            if role.id in whitelisted_roles:
+                return True
+
+        if ctx.author.id in whitelisted_people:
             return True
         return False
 
@@ -72,10 +75,10 @@ class Scam_detection(commands.Cog):
             
             flagged_reasons = []
             verdict_status = "None"
-            for file in message.attachments:
-                if file.content_type and file.content_type.startswith('image/'):
-                    self.log_to_console((Path(__file__).name), "scam_detection", f"Found image in {message.author.name}'s (id: {message.author.id}) message (message_id: {message.id})")
 
+            for file in message.attachments:
+                self.log_to_console((Path(__file__).name), "scam_detection", f"Found image in {message.author.name}'s (id: {message.author.id}) message (message_id: {message.id})")
+                if file.content_type and file.content_type.startswith('image/'):
                     #this was written by ai, cause i'm again, too stupid
                     raw_data = await file.read()
                     img = Image.open(io.BytesIO(raw_data)).convert('RGB')
@@ -85,9 +88,14 @@ class Scam_detection(commands.Cog):
                     base64cleaned = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
                     verdict = await call_the_vl(base64cleaned)
-                    verdictwords = verdict.split("|")
-                    verdict_status = verdictwords[0].strip()
-                    verdict_reason = verdictwords[1].strip() 
+                    try:
+                        verdictwords = verdict.split("|")
+                        verdict_status = verdictwords[0].strip()
+                        verdict_reason = verdictwords[1].strip() 
+                    except IndexError:
+                        if "SAFE" in verdict:
+                            verdict_status = "SAFE"
+                            verdict_reason = "AI FUCKUP, FUCKING AI AGHHHHHHHHH"
 
                     print(
                         "\n" + "=" * 50 + "\n"
@@ -96,13 +104,21 @@ class Scam_detection(commands.Cog):
                         f"Reasoning : {verdict_reason}\n"
                         + "=" * 50
                     )
+
                     if "SCAM" in verdict_status.upper():
                         flagged_reasons.append(verdict_status)
-                self.log_to_console((Path(__file__).name), "scam_detection", f"If scam present ({verdict_status}), giving a ping.\n")
+
+                    try:
+                        await message.channel.fetch_message(message.id)
+                    except discord.NotFound:
+                        self.log_to_console((Path(__file__).name), "scam_detection", "message was deleted before pinging, stopping")
+                        return
             if flagged_reasons:
+
                 ping_list = []
                 pingable_ids = list(self.config["ENROLLED_FOR_PING_PEOPLE"].values())
                 print(pingable_ids)
+
                 if pingable_ids:
                     for pingable_id in pingable_ids:
                         ping_list.append(f"<@{pingable_id}>")
@@ -118,6 +134,8 @@ class Scam_detection(commands.Cog):
                         f"-# P.S NONE of the images are getting logged anywhere. ||<@1002650457333841950>|| \n"
                     )
                 self.ping_messages[message.id] = pinged_message
+            else:
+                self.log_to_console((Path(__file__).name), "scam_detection", "no scam detected, nice")
         
     @commands.Cog.listener()
     async def on_message_delete(self, message):

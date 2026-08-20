@@ -19,7 +19,7 @@ else:
 
 if not os.path.exists(".env"):
     DISCORD_TOKEN = input("Please provide your discord token: ")
-    with open("storage/storage/QuestionRequests.txt", mode="w") as file:
+    with open(".env", mode="w") as file:
         file.write(f"DISCORD_TOKEN={DISCORD_TOKEN}")
 else:
     print("you already have .env file")

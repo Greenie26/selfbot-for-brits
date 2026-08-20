@@ -1,0 +1,1 @@
+shop -: The shop is the stock market where players can buy and sell items using the /s command.

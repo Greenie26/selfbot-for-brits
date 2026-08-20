@@ -1,5 +1,6 @@
 .env
 testfile.py
+chroma_db
 __pycache__/
 *.py[cod]
 *$py.class

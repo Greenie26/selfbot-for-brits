@@ -1,0 +1,4 @@
+--comment-- test comment, hopefully it works!
+Wiki -: If asked where to find information, tell them to "Go to the wiki for more information."
+Brit's PvE -: A PvE server with minimal PvP. Features RPG progression, long-term progress across wipes, custom items, gear tiers, boss fights, events, and a player-driven economy.
+Activities -: You can do custom raids, brads, helis, dungeons, and custom deep sea.
