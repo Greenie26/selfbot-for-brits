@@ -1,0 +1,35 @@
+--comment-- BASICS ABOUT RAIDS
+What is a Custom Raid on this server -: Custom raid is an event that allows you to buy pre-build bases to raid, you can earn valuable stuff like legendaries by doing custom raids.
+Raid cost and currency -: to buy a raid, you need rp, easy costs 500rp, medium costs 1000rp, hard costs 5000rp. expert costs 10000rp and nightmare costs 20000rp
+Spawning/Buying the raid-: to buy a raid you need to type /buyraid in the raid world
+How to travel to raid world -: to enter the raid world, you need to enter a raid portal from hub (to go back to hub you can do /hub)
+Raid difficulties -: there is easy, medium, hard, expert and nightmare.
+Cooldown on buying raids -: There is a cooldown for a singular diffculty, so if you done nightmare, you can do hard after it despawns. Also cooldown is world-spefic, so you can go to another world to gain new cooldowns.
+--comment-- 
+--comment-- PVE ASPECT OF RAIDS
+Accessiblity of your raid to other players -: No one can enter your raid other than your teammembers.
+Possibility of dying to another player while raiding -: There is no PvP. You cannot be killed by other players. You can only die to traps or if your teammate accidentally rockets you.
+Teammates in raids -: You can do raids with your teammembers.
+Raid despawn timer -: If you leave your raid undamaged for more than 20 min it will despawn, in looting phase it's 5 min until despawn (tip: you can shoot walls when looting to reset cooldown)
+Placing in the raid after you destroy tc -: You cannot place anythingo other than ladders, in the raid zone or in the raid world even when you destroy the tc.
+--comment-- 
+--comment-- TRAPS IN RAIDS
+Do i need to bring my own explosives -: Yes, you absolutely do have to get your own explosives.
+Normal traps in raids -: Yes, there are gantraps, flamethrowes, rarely tesla coils, and turrets.
+Custom traps in raids -: There are no custom traps in raids.
+Are there npcs near the raids -: No, there isn't.
+Anti-Air (SAM sites) in raids -: there are sam sites, they will try to deflect your strike from /strike command.
+--comment-- 
+--comment-- DYING ASPECT OF RAIDS
+Death inside the base -: your body will remain in the base exactly where you died.
+Respawn point -: You will respawn in the center of the raid world and gonna have to ride back to your raid.
+Loot after death -: All of your loot, other than the custom backpack, will be in the body where you died.
+Crash/disconnect during the raid -: The raid will be in the state it's left in, if you join before the base despawn, if raid worlds are restarting or/and down, your raid base will disappear
+Glitch of the raid -: If your raid glitches, try to rejoin the server. If there is no success in that, you need to open a ticket.
+--comment-- 
+--comment-- LOOTING ASPECT OF RAIDS
+Finising the raid base -: To fully finish the raid base, you need to destroy all of the boxes and tc that contain loot.
+Main loot places -: All of the loot is disperssed through all the boxes.
+XP on finishing the raid -: you will get a small amount of xp when you finish the raid.
+legendaries in raids -: you can find legendary weapons and clothing in raids, to find out more check out wiki's loot table.
+RP gains from raids -: you will get sellable resources (e.g batteries, bleach, etc) and legendaries that you can sell for rp in /sell or sell it to players in hub /s. The amount of RP varies on the difficulty of the raid.

@@ -1,5 +1,5 @@
 {
-    "BOT_VERSION": "V2.0.0",
+    "BOT_VERSION": "V2.1.0",
     "LOCAL_IP": "192.168.0.247",
     "PREFIX": ".",
     "TARGET_GUILD_ID": 1222282816918786150,
@@ -28,6 +28,7 @@
         "STAFF": 1353739289703219302
     },
     "ENROLLED_FOR_PING_PEOPLE": {
-        "dubbs": 184467464824946689
-    }
+
+    },
+    "dubbs": 184467464824946689
 }

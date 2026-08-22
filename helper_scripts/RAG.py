@@ -21,8 +21,7 @@ for file_name in os.listdir(data_path):
             text = file.read()
             #idfk, i think it loops through the text, hopefully it does.
             sentences = text.split("\n")
-
-            s_start = 0
+            
             for sentence in sentences:
                 if sentence.startswith("--comment--"):
                     print("skipped a comment")
@@ -37,6 +36,6 @@ print("success")
 def query(question):
     results = collection.query(
     query_texts=[question],
-    n_results=5
+    n_results=3
 )
     return results["documents"][0]
